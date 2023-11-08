@@ -118,7 +118,7 @@ public class Inventory : MonoBehaviour
 
     public void UseItem(ItemSlot slot)
     {
-        if (slot.Item is MeleeWeaponItemData || slot.Item is RangedWeaponItemData)
+        if (slot.Item is MeleeWeaponItemData || slot.Item is RangedWeaponItemData || slot.Item is SaltData)
         {
             Player.Instance.equipCtrl.Equip(slot.Item);
         }

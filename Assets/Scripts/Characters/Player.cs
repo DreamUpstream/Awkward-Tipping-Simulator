@@ -21,6 +21,6 @@ public class Player : Character
 
     public override void Die()
     {
-        SceneManager.LoadScene("SampleScene");
+        // SceneManager.LoadScene("SampleScene");
     }
 }
