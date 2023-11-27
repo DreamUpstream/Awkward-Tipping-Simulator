@@ -5,6 +5,7 @@ using System.IO;
 
 public class Waiter : MonoBehaviour
 {
+    
     public enum State
     {
         Work,
@@ -22,12 +23,16 @@ public class Waiter : MonoBehaviour
     [SerializeField] protected int awareness = 1;
 
     [SerializeField] protected GameObject[] workingPositions;
-    [SerializeField] protected GameObject restPosition;
     protected GameObject currentTarget;
 
+
+    // We need to set target for AIDestinationSetter for the AI to move
     protected AIDestinationSetter target;
+
+    // Not used atm.
     protected float targetDistance;
 
+    // Class which calculates the path
     private Seeker seeker;
     private Pathfinding.Path path;
     [SerializeField] private AIPath aiPath;
@@ -36,13 +41,13 @@ public class Waiter : MonoBehaviour
     private bool isPathSet = false;
 
 
-    [Header("Components")]
-    [SerializeField] protected SpriteRenderer spriteRenderer;
+    // [Header("Components")]
+    // [SerializeField] protected SpriteRenderer spriteRenderer;
 
     void Start()
     {
         target = FindObjectOfType<AIDestinationSetter>();
-        currentState = State.Work;
+        currentState = State.Work; // Work or Enranged works
 
         seeker = GetComponent<Seeker>();
         aiPath = GetComponent<AIPath>();
@@ -55,7 +60,7 @@ public class Waiter : MonoBehaviour
     {
         targetDistance = Vector2.Distance(transform.position, target.transform.position);
 
-        spriteRenderer.flipX = GetTargetDirection().x < 0;
+        // spriteRenderer.flipX = GetTargetDirection().x < 0;
 
         switch (currentState)
         {
@@ -85,7 +90,8 @@ public class Waiter : MonoBehaviour
             target.target = workingPositions[currentWaypoint].transform;
         }
 
-        if (aiPath.reachedEndOfPath) {
+        // Rotate through positions
+        if (aiPath.reachedEndOfPath || aiPath.remainingDistance <= 0.5f) {
             currentWaypoint++;
             if (currentWaypoint >= workingPositions.Length) {
                 currentWaypoint = 0;
@@ -120,6 +126,8 @@ public class Waiter : MonoBehaviour
 
     }
 
+
+    // Function which should alert nearby waiters 
     protected IEnumerator AlertOtherWaiters()
     {
         Waiter[] waiters = FindObjectsOfType<Waiter>();
@@ -155,10 +163,10 @@ public class Waiter : MonoBehaviour
     }
 
 
-    protected Vector2 GetTargetDirection()
-    {
-        return (target.transform.position - transform.position).normalized;
-    }
+    // protected Vector2 GetTargetDirection()
+    // {
+    //     return (target.transform.position - transform.position).normalized;
+    // }
 
 
     protected void UpdateAwarenessLevel()
