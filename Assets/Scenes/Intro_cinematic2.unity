@@ -482,6 +482,7 @@ MonoBehaviour:
   - I must leave the restaurant before embarassing myself.
   textSpeed: 0.1
   sceneToLoad: Losing_cinematic
+  typingSound: {fileID: 8300000, guid: fff03872a6f7676428dfa8a64577bfac, type: 3}
 --- !u!114 &1450943778
 MonoBehaviour:
   m_ObjectHideFlags: 0
