@@ -21,6 +21,9 @@ public abstract class Enemy : Character
     [SerializeField] protected ItemData[] dropItems;
     [SerializeField] protected GameObject dropItemPrefab;
 
+    [SerializeField] private Animator animator;
+    protected Vector2 prev_dir;
+
     protected GameObject Target;
 
     protected float LastAttackTime;
@@ -59,8 +62,10 @@ public abstract class Enemy : Character
 
     void IdleUpdate()
     {
+        animator.SetFloat("speed", 0);
         if(TargetDistance<=chaseDistance)
             ChangeState(State.Chase);
+            
     }
 
     void ChaseUpdate()
@@ -72,15 +77,24 @@ public abstract class Enemy : Character
         
         transform.position =
             Vector3.MoveTowards(transform.position, Target.transform.position, moveSpeed * Time.deltaTime);
+
+        Vector2 velocity = GetTargetDirection();
+        Vector2 direction = GetNormalizedDirection(velocity);
+        if (direction != prev_dir)
+        {
+            ProcessAnimation(direction);
+            prev_dir = direction;
+        }
     }
 
     void AttackUpdate()
     {
         if(TargetDistance>chaseDistance)
+        {
             ChangeState(State.Idle);
+        }
         else if(!InAttackRange())
             ChangeState(State.Chase);
-
         if (CanAttack())
         {
             LastAttackTime = Time.time;
@@ -122,5 +136,43 @@ public abstract class Enemy : Character
             GameObject obj = Instantiate(dropItemPrefab, transform.position, quaternion.identity);
             obj.GetComponent<WorldItem>().SetItem(dropItems[i]);
         }
+    }
+
+    protected void ProcessAnimation(Vector2 direction)
+    {
+        animator.SetFloat("dir_x", direction.x);
+        animator.SetFloat("dir_y", direction.y);
+        animator.SetFloat("speed", 1);
+    }
+
+    private Vector2 GetNormalizedDirection(Vector2 velocity)
+    {
+        Vector2 direction;
+        if (velocity.x > 0.5)
+        {
+            direction.x = 1; /// Idk why, but it works normally when both x are 1...
+            direction.y = 0;
+        }
+        else if (velocity.x < -0.5)
+        {
+            direction.x = 1;
+            direction.y = 0;
+        }
+        else if (velocity.y > 0.5)
+        {
+            direction.x = 0;
+            direction.y = -1;
+        }
+        else if (velocity.y < -0.5)
+        {
+            direction.x = 0;
+            direction.y = 1;
+        }
+        else
+        {
+            direction.x = 0;
+            direction.y = 0;
+        }
+        return direction;
     }
 }
