@@ -560,6 +560,7 @@ MonoBehaviour:
   - The waiter deserves a large tip.
   textSpeed: 0.1
   sceneToLoad: Intro_cinematic2
+  typingSound: {fileID: 8300000, guid: fff03872a6f7676428dfa8a64577bfac, type: 3}
 --- !u!114 &878039971
 MonoBehaviour:
   m_ObjectHideFlags: 0

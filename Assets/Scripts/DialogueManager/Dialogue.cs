@@ -11,12 +11,15 @@ public class Dialogue : MonoBehaviour
     public string[] lines;
     public float textSpeed;
     public string sceneToLoad;
+    public AudioClip typingSound;
 
     private int index;
+    private AudioSource audioSource;
 
     void Start()
     {
         textComponent.text = string.Empty;
+        audioSource = gameObject.AddComponent<AudioSource>();
         StartDialogue();
     }
 
@@ -47,6 +50,7 @@ public class Dialogue : MonoBehaviour
     {
         foreach (char c in lines[index].ToCharArray())
         {
+            PlayTypingSound();
             textComponent.text += c;
             yield return new WaitForSeconds(textSpeed);
         }
@@ -63,6 +67,15 @@ public class Dialogue : MonoBehaviour
         else
         {
             SceneManager.LoadScene(sceneToLoad);
+        }
+    }
+
+    void PlayTypingSound()
+    {
+        if (typingSound != null)
+        {
+            audioSource.clip = typingSound;
+            audioSource.Play();
         }
     }
 }
