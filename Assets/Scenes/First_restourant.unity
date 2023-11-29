@@ -572,6 +572,30 @@ PrefabInstance:
       propertyPath: spriteRenderer
       value: 
       objectReference: {fileID: 2067434113}
+    - target: {fileID: 3826468341005246726, guid: db2559d461cf89b4fadbd5dffcbfba91, type: 3}
+      propertyPath: curHp
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3826468341005246726, guid: db2559d461cf89b4fadbd5dffcbfba91, type: 3}
+      propertyPath: maxHp
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3826468341005246726, guid: db2559d461cf89b4fadbd5dffcbfba91, type: 3}
+      propertyPath: deathSFX
+      value: 
+      objectReference: {fileID: 8300000, guid: 2051bfbf8c574bc4fb0652506ff226e7, type: 3}
+    - target: {fileID: 3826468341005246726, guid: db2559d461cf89b4fadbd5dffcbfba91, type: 3}
+      propertyPath: deathSFX1
+      value: 
+      objectReference: {fileID: 8300000, guid: 0f6dafadd8bb14f1c8af902c027326ea, type: 3}
+    - target: {fileID: 3826468341005246726, guid: db2559d461cf89b4fadbd5dffcbfba91, type: 3}
+      propertyPath: deathSFX2
+      value: 
+      objectReference: {fileID: 8300000, guid: 7c85e72cf539a4a13b121078b988a6b1, type: 3}
+    - target: {fileID: 3826468341005246726, guid: db2559d461cf89b4fadbd5dffcbfba91, type: 3}
+      propertyPath: deathSFX3
+      value: 
+      objectReference: {fileID: 8300000, guid: 611a5024c64f24aa090ff3741969ec0b, type: 3}
     - target: {fileID: 3826468341005246729, guid: db2559d461cf89b4fadbd5dffcbfba91, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.0038649887

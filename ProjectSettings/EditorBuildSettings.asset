@@ -23,4 +23,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Intro_cinematic2.unity
     guid: e41b1f96d80d60348876e7689256a3f5
+  - enabled: 1
+    path: Assets/Scenes/Losing_cinematic.unity
+    guid: b8d1107a36917d341b7f5494e9a3f622
+  - enabled: 1
+    path: Assets/Scenes/First_restourant.unity
+    guid: 5a9975d07f0ab44f2abaf698b1f1f848
   m_configObjects: {}
