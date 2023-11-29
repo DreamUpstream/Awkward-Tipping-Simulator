@@ -125,17 +125,31 @@ public abstract class Enemy : Character
 
     public override void Die()
     {
-        DropItems();
-        Destroy(gameObject);
+        // DropItems();
+        // Destroy(gameObject);
     }
 
     protected void DropItems()
     {
-        for (int i = 0; i < dropItems.Length; i++)
-        {
-            GameObject obj = Instantiate(dropItemPrefab, transform.position, quaternion.identity);
-            obj.GetComponent<WorldItem>().SetItem(dropItems[i]);
-        }
+        // Debug.Log("Drop items");
+        // for (int i = 0; i < dropItems.Length; i++)
+        // {
+        //     GameObject obj = Instantiate(dropItemPrefab, transform.position, quaternion.identity);
+        //     obj.GetComponent<WorldItem>().SetItem(dropItems[i]);
+        // }
+    }
+
+    public override void TakeDamage(int damageToTake) {
+        Debug.Log("take damage");    
+
+        StartCoroutine(FreezeAndUnfreeze());
+    }
+
+    IEnumerator FreezeAndUnfreeze() {
+        var oldSpeed = moveSpeed;
+        moveSpeed = 0;
+        yield return new WaitForSeconds(0.5f);
+        moveSpeed = oldSpeed;
     }
 
     protected void ProcessAnimation(Vector2 direction)
