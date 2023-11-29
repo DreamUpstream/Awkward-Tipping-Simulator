@@ -559,7 +559,7 @@ MonoBehaviour:
   - I am working for a minimum wage, goddammit!
   - You must be ashamed of yourself...
   textSpeed: 0.1
-  sceneToLoad: Main_menu
+  sceneToLoad: Losing_cinematic2
   typingSound: {fileID: 8300000, guid: fff03872a6f7676428dfa8a64577bfac, type: 3}
 --- !u!114 &1235572359
 MonoBehaviour:
