@@ -5,7 +5,7 @@ using System.IO;
 
 public class Waiter : MonoBehaviour
 {
-    
+
     public enum State
     {
         Work,
@@ -13,6 +13,7 @@ public class Waiter : MonoBehaviour
         CheckPlayer,
         Alert,
         Enraged,
+        Attack,
     }
 
     protected State currentState;
@@ -21,6 +22,17 @@ public class Waiter : MonoBehaviour
     [SerializeField] protected float chaseDistance;
     [SerializeField] protected float alertRange = 10f;
     [SerializeField] protected int awareness = 1;
+    [SerializeField] protected float timeBeforeAgro = 30f;
+    private float timer = 0f;
+
+    [SerializeField] private int damage = 25;
+    [SerializeField] private float attackRange = 1;
+    [SerializeField] private float attackRate = 1;
+
+    protected float LastAttackTime;
+    protected float TargetDistance;
+
+    [SerializeField] protected GameObject player;
 
     [SerializeField] protected GameObject[] workingPositions;
     protected GameObject currentTarget;
@@ -54,13 +66,32 @@ public class Waiter : MonoBehaviour
 
 
         StartCoroutine(UpdatePath());
+        // StartCoroutine(HardReset());
     }
 
     void Update()
-    {
+    {  
+        // aiPath.Move(Time.deltaTime);
+        if (player != null)
+        {
+            TargetDistance = Vector2.Distance(transform.position, player.transform.position);
+        }
+
+        timer += Time.deltaTime;
+
+
+        if (currentState != State.Attack)
+        {
+            if ((timer >= timeBeforeAgro) && currentState != State.Enraged)
+            {
+                currentState = State.Enraged;
+            }
+        }
+
+
+        // targetDistance = Vector2.Distance(transform.position, target.transform.position);
         targetDistance = Vector2.Distance(transform.position, target.transform.position);
 
-        // spriteRenderer.flipX = GetTargetDirection().x < 0;
 
         switch (currentState)
         {
@@ -76,8 +107,24 @@ public class Waiter : MonoBehaviour
             case State.Enraged:
                 Enraged();
                 break;
+            case State.Attack:
+                Attack();
+                break;
             default:
                 break;
+        }
+    }
+
+    protected void Attack()
+    {
+        if (!InAttackRange())
+        {
+            currentState = State.Enraged;
+        }
+        if (CanAttack())
+        {
+            LastAttackTime = Time.time;
+            AttackTarget();
         }
     }
 
@@ -85,15 +132,18 @@ public class Waiter : MonoBehaviour
     {
 
         // set default values(?) 
-        if (currentTarget == null || target.target == null) {
+        if (currentTarget == null || target.target == null)
+        {
             currentTarget = workingPositions[currentWaypoint];
             target.target = workingPositions[currentWaypoint].transform;
         }
 
         // Rotate through positions
-        if (aiPath.reachedEndOfPath || aiPath.remainingDistance <= 0.5f) {
+        if (aiPath.reachedEndOfPath || aiPath.remainingDistance <= 0.5f)
+        {
             currentWaypoint++;
-            if (currentWaypoint >= workingPositions.Length) {
+            if (currentWaypoint >= workingPositions.Length)
+            {
                 currentWaypoint = 0;
             }
 
@@ -106,19 +156,7 @@ public class Waiter : MonoBehaviour
 
     protected void CheckPlayer()
     {
-        // if (targetDistance < chaseDistance)
-        // {
-        //     currentState = State.Chase;
-        // }
-        // else if (targetDistance < alertRange)
-        // {
-        //     currentState = State.Alert;
-        //     StartCoroutine(AlertOtherWaiters());
-        // }
-        // else
-        // {
-        //     currentState = State.Work;
-        // }
+
     }
 
     protected void Alert()
@@ -155,11 +193,20 @@ public class Waiter : MonoBehaviour
         // Can be done only if it's in range, and otherwise maybe switches to angry wander
         // Where he randomly selects a position and pathfinds towards it unless the player gets 
         // in the range again
-        var player = FindObjectOfType<Player>();
-        if (player != null) {
+
+        // var player_instance = FindObjectOfType<Player>();
+        if (player != null)
+        {
             target.target = player.transform.transform;
-            currentTarget = player.gameObject;
+            currentTarget = player;
         }
+
+        if (InAttackRange())
+        {
+            currentState = State.Attack;
+        }
+
+
     }
 
 
@@ -173,28 +220,63 @@ public class Waiter : MonoBehaviour
     {
         awareness++;
 
-        Debug.Log("[Waiter.cs] (UpdateAwarnessLevel): Updated awarness level " + awareness);
+        // Debug.Log("[Waiter.cs] (UpdateAwarnessLevel): Updated awarness level " + awareness);
     }
 
     IEnumerator UpdatePath()
     {
         while (true)
         {
-            RecalculatePath();
+            // if (aiPath == null || aiPath.remainingDistance <= 0.5f) {
+            // }
+            if (path != null && path.IsDone()) {
+                aiPath.SetPath(path);
+            } else {
+                RecalculatePath();
+            }
             yield return new WaitForSeconds(1f);
+        }
+    }
+
+
+    IEnumerator HardReset()
+    {
+        while (true)
+        {
+            // isPathSet = false;
+            Debug.Log("A: " + aiPath.reachedEndOfPath);
+            if (!aiPath.pathPending && aiPath.reachedEndOfPath)
+            {
+                path = null;
+                isPathSet = false;
+                currentTarget = player;
+                RecalculatePath();
+            }
+
+            if (path.IsDone())
+            {
+                aiPath.SetPath(path);
+            }
+
+            yield return new WaitForSeconds(2f);
+
         }
     }
 
     void RecalculatePath()
     {
+
         isPathSet = false; // Reset the flag
 
-        if (currentTarget == null) {
-            return;
+        if (currentTarget == null)
+        {
+            // Debug.Log("Null target!!!!!");
+            currentTarget = player;
+            // return;
         }
 
         // this if statement might be unnecessary. (made by gpt)
-        if (currentState == State.Work || currentState == State.Chase || currentState == State.Enraged)
+        if (currentState == State.Work || currentState == State.Attack || currentState == State.Enraged)
         {
             // Calculate a new path to the target position
             seeker.StartPath(transform.position, currentTarget.transform.position, OnPathComplete);
@@ -217,6 +299,25 @@ public class Waiter : MonoBehaviour
                 isPathSet = true;
             }
         }
+    }
+
+    protected void AttackTarget()
+    {
+        Debug.Log("Attack called");
+        IDamagable damagable = player.GetComponent<IDamagable>();
+
+        if (damagable != null)
+            damagable.TakeDamage(damage);
+    }
+
+    protected bool CanAttack()
+    {
+        return Time.time - LastAttackTime > attackRate;
+    }
+
+    protected bool InAttackRange()
+    {
+        return TargetDistance <= attackRange;
     }
 
 }
