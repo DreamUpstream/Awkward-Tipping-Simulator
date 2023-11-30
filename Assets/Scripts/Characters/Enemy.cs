@@ -41,6 +41,15 @@ public abstract class Enemy : Character
     protected virtual void Start()
     {
         Target = FindObjectOfType<Player>().gameObject;
+        // depending on scene name change moveSpeed (if "restourant_og" - 2, if "restaurant1" - 3):
+        if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "restaurant1")
+        {
+            moveSpeed = 2.5f;
+        }
+        else
+        {
+            moveSpeed = 2;
+        }
     }
 
     protected virtual void Update()
@@ -84,6 +93,16 @@ public abstract class Enemy : Character
             ChangeState(State.Attack);
         else if (TargetDistance > chaseDistance)
             ChangeState(State.Idle);
+
+        // make get this object and make sprite red if scene is "restaurant1":
+        if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "restaurant1")
+        {
+            spriteRenderer.color = Color.red;
+        }
+        else if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "restourant_og")
+        {
+            spriteRenderer.color = Color.yellow;
+        }
 
         transform.position =
             Vector3.MoveTowards(transform.position, Target.transform.position, moveSpeed * Time.deltaTime);

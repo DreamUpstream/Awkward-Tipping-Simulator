@@ -188,7 +188,7 @@ MonoBehaviour:
   team: 1
   audioSource: {fileID: 9145144984074265013}
   hitSFX: {fileID: 8300000, guid: bca3b75b48468b24985f3b15bf77853a, type: 3}
-  moveSpeed: 2
+  moveSpeed: 3
   chaseDistance: 4
   dropItems:
   - {fileID: 11400000, guid: 453da9dbdd773774a91794092d27eb36, type: 2}
