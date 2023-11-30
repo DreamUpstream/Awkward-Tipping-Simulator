@@ -2552,11 +2552,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 9145144984074265014, guid: 81364b05ad2f534418408465371004b3, type: 3}
   m_PrefabInstance: {fileID: 700667332}
   m_PrefabAsset: {fileID: 0}
---- !u!212 &700667334 stripped
-SpriteRenderer:
-  m_CorrespondingSourceObject: {fileID: 9145144983038361295, guid: 81364b05ad2f534418408465371004b3, type: 3}
-  m_PrefabInstance: {fileID: 700667332}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &700667335
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2577,9 +2572,7 @@ MonoBehaviour:
   - {fileID: 1113968368}
   - {fileID: 906777611}
   - {fileID: 1374109197}
-  restPosition: {fileID: 1374109197}
   aiPath: {fileID: 700667344}
-  spriteRenderer: {fileID: 700667334}
 --- !u!114 &700667343
 MonoBehaviour:
   m_ObjectHideFlags: 0
