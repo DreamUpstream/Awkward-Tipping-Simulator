@@ -81,17 +81,22 @@ public class Waiter : MonoBehaviour
         }
     }
 
-    // a class which coroutine will be started that will enable the MeleeEnemy script on this object after 30 seconds:
     public void EnableMeleeEnemy()
     {
-        StartCoroutine(EnableMeleeEnemyAfterSeconds(15));
+        StartCoroutine(MakeEnemyYellow(2));
+        StartCoroutine(EnableMeleeEnemyAfterSeconds(4));
     }
 
-    // EnableMeleeEnemyAfterSeconds:
+    IEnumerator MakeEnemyYellow(int seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        GetComponent<SpriteRenderer>().color = Color.yellow;
+    }
     IEnumerator EnableMeleeEnemyAfterSeconds(int seconds)
     {
         yield return new WaitForSeconds(seconds);
         GetComponent<MeleeEnemy>().enabled = true;
+        GetComponent<SpriteRenderer>().color = Color.red;
     }
 
     protected void Work()
