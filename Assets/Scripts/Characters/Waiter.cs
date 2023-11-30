@@ -5,7 +5,7 @@ using System.IO;
 
 public class Waiter : MonoBehaviour
 {
-    
+
     public enum State
     {
         Work,
@@ -52,7 +52,7 @@ public class Waiter : MonoBehaviour
         seeker = GetComponent<Seeker>();
         aiPath = GetComponent<AIPath>();
 
-
+        EnableMeleeEnemy();
         StartCoroutine(UpdatePath());
     }
 
@@ -81,19 +81,35 @@ public class Waiter : MonoBehaviour
         }
     }
 
+    // a class which coroutine will be started that will enable the MeleeEnemy script on this object after 30 seconds:
+    public void EnableMeleeEnemy()
+    {
+        StartCoroutine(EnableMeleeEnemyAfterSeconds(15));
+    }
+
+    // EnableMeleeEnemyAfterSeconds:
+    IEnumerator EnableMeleeEnemyAfterSeconds(int seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        GetComponent<MeleeEnemy>().enabled = true;
+    }
+
     protected void Work()
     {
 
         // set default values(?) 
-        if (currentTarget == null || target.target == null) {
+        if (currentTarget == null || target.target == null)
+        {
             currentTarget = workingPositions[currentWaypoint];
             target.target = workingPositions[currentWaypoint].transform;
         }
 
         // Rotate through positions
-        if (aiPath.reachedEndOfPath || aiPath.remainingDistance <= 0.5f) {
+        if (aiPath.reachedEndOfPath || aiPath.remainingDistance <= 0.5f)
+        {
             currentWaypoint++;
-            if (currentWaypoint >= workingPositions.Length) {
+            if (currentWaypoint >= workingPositions.Length)
+            {
                 currentWaypoint = 0;
             }
 
@@ -156,7 +172,8 @@ public class Waiter : MonoBehaviour
         // Where he randomly selects a position and pathfinds towards it unless the player gets 
         // in the range again
         var player = FindObjectOfType<Player>();
-        if (player != null) {
+        if (player != null)
+        {
             target.target = player.transform.transform;
             currentTarget = player.gameObject;
         }
@@ -189,7 +206,8 @@ public class Waiter : MonoBehaviour
     {
         isPathSet = false; // Reset the flag
 
-        if (currentTarget == null) {
+        if (currentTarget == null)
+        {
             return;
         }
 
