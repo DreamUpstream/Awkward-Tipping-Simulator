@@ -182,7 +182,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a75e628e7110bad46a482f3bc43682c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  displayName: Sceleton
+  displayName: Waiter
   curHp: 10
   maxHp: 10
   team: 1
@@ -195,6 +195,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6525db7d7e38216458c5b217332ae3f6, type: 2}
   - {fileID: 11400000, guid: 2ad1ef55cf7eeb04cad58562e45b7e20, type: 2}
   dropItemPrefab: {fileID: 1108161495304172382, guid: 9dd2c36a74d163f47bf07a152ac932ec, type: 3}
+  chaseSFX: {fileID: 8300000, guid: 611a5024c64f24aa090ff3741969ec0b, type: 3}
   animator: {fileID: 8283847769995107316}
   spriteRenderer: {fileID: 6909385008495271448}
   damage: 5

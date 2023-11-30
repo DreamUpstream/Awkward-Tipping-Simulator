@@ -12,14 +12,20 @@ public abstract class Enemy : Character
         Chase,
         Attack
     }
-    
+
     protected State CurState;
 
     [SerializeField] protected float moveSpeed;
     [SerializeField] protected float chaseDistance;
 
+
+
     [SerializeField] protected ItemData[] dropItems;
     [SerializeField] protected GameObject dropItemPrefab;
+
+    // chaseSFX:
+    [Header("Audio")]
+    [SerializeField] protected AudioClip chaseSFX;
 
     [SerializeField] private Animator animator;
     protected Vector2 prev_dir;
@@ -29,7 +35,7 @@ public abstract class Enemy : Character
     protected float LastAttackTime;
     protected float TargetDistance;
 
-    [Header("Components")] 
+    [Header("Components")]
     [SerializeField] protected SpriteRenderer spriteRenderer;
 
     protected virtual void Start()
@@ -42,16 +48,19 @@ public abstract class Enemy : Character
         TargetDistance = Vector2.Distance(transform.position, Target.transform.position);
 
         spriteRenderer.flipX = GetTargetDirection().x < 0;
-        
+
         switch (CurState)
         {
-            case State.Idle: IdleUpdate();
+            case State.Idle:
+                IdleUpdate();
                 break;
-            case State.Chase: ChaseUpdate();
+            case State.Chase:
+                ChaseUpdate();
                 break;
-            case State.Attack: AttackUpdate();
+            case State.Attack:
+                AttackUpdate();
                 break;
-            
+
         }
     }
 
@@ -63,18 +72,19 @@ public abstract class Enemy : Character
     void IdleUpdate()
     {
         animator.SetFloat("speed", 0);
-        if(TargetDistance<=chaseDistance)
+        if (TargetDistance <= chaseDistance)
             ChangeState(State.Chase);
-            
+
     }
 
     void ChaseUpdate()
     {
-        if(InAttackRange())
+        // audioSource.PlayOneShot(chaseSFX, 0.2f);
+        if (InAttackRange())
             ChangeState(State.Attack);
-        else if(TargetDistance>chaseDistance)
+        else if (TargetDistance > chaseDistance)
             ChangeState(State.Idle);
-        
+
         transform.position =
             Vector3.MoveTowards(transform.position, Target.transform.position, moveSpeed * Time.deltaTime);
 
@@ -89,23 +99,23 @@ public abstract class Enemy : Character
 
     void AttackUpdate()
     {
-        if(TargetDistance>chaseDistance)
+        if (TargetDistance > chaseDistance)
         {
             ChangeState(State.Idle);
         }
-        else if(!InAttackRange())
+        else if (!InAttackRange())
             ChangeState(State.Chase);
         if (CanAttack())
         {
             LastAttackTime = Time.time;
             AttackTarget();
         }
-        
+
     }
 
     protected virtual void AttackTarget()
     {
-        
+
     }
 
     protected virtual bool CanAttack()
@@ -139,13 +149,15 @@ public abstract class Enemy : Character
         // }
     }
 
-    public override void TakeDamage(int damageToTake) {
-        Debug.Log("take damage");    
+    public override void TakeDamage(int damageToTake)
+    {
+        Debug.Log("take damage");
 
         StartCoroutine(FreezeAndUnfreeze());
     }
 
-    IEnumerator FreezeAndUnfreeze() {
+    IEnumerator FreezeAndUnfreeze()
+    {
         var oldSpeed = moveSpeed;
         moveSpeed = 0;
         yield return new WaitForSeconds(0.5f);

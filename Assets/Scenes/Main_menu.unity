@@ -496,6 +496,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   backgroundMusic: {fileID: 8300000, guid: b5e23c6664564154e9d2527970aac031, type: 3}
+  scenesWithoutMusic:
+  - restourant_og
+  - restaurant1
 --- !u!1 &502857369
 GameObject:
   m_ObjectHideFlags: 0
